@@ -1,17 +1,65 @@
 // Classic bubble sort algorithm
 #include <iostream>
 #include <new>
+#include <functional>
 
-void bubble_sort(int n, int arr[]);
-
-void print(int n, int arr[])
+class Container
 {
-    for (int i = 0; i < n; ++i)
+public:
+    Container(unsigned int _size)
     {
-        std::cout << arr[i] << " ";
+        size = _size;
+        arr = new (std::nothrow) int[size];
     }
-    std::cout << std::endl;
-}
+
+    ~Container()
+    {
+        delete[] arr;
+    }
+
+    int &operator[](int index)
+    {
+        return arr[index];
+    }
+
+    void print()
+    {
+        for (int i = 0; i < size; ++i)
+        {
+            std::cout << arr[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    void bubble_sort()
+    {
+        auto fnSwap = [](int *x, int *y)
+        {
+            int temp = *x;
+            *x = *y;
+            *y = temp;
+        };
+
+        // do not raverse to last element because
+        // we are doing j+1 in the loop.
+        const unsigned int n = size - 1;
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n - i; j++)
+            {
+                if (arr[j] > arr[j + 1]) // swap
+                {
+                    fnSwap(&arr[j], &arr[j + 1]);
+                }
+            }
+        }
+    }
+
+private:
+    int *arr = nullptr;
+    unsigned int size = 0;
+};
 
 int main()
 {
@@ -19,41 +67,14 @@ int main()
     int n = 0;
     std::cin >> n;
 
-    int *arr = new (std::nothrow) int[n];
-    if (nullptr == arr)
-    {
-        std::cout << "cannot allocate memory" << std::endl;
-        return -1;
-    }
+    Container c(n);
 
     for (int i = 0; i < n; ++i)
-    {
-        std::cin >> arr[i];
-    }
+        std::cin >> c[i];
 
     std::cout << "input array: \t";
-    print(n, arr);
-    bubble_sort(n, arr);
+    c.print();
+    c.bubble_sort();
     std::cout << "sorted array: \t";
-    print(n, arr);
-}
-
-void bubble_sort(int n, int arr[])
-{
-    // do not raverse to last element because
-    // we are doing j+1 in the loop.
-    n = n - 1;
-
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n - i; j++)
-        {
-            if (arr[j] > arr[j + 1]) // swap
-            {
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
+    c.print();
 }
