@@ -59,7 +59,7 @@ int main()
         int arr[] = {5, 4, 3, 2, 1, 0};
         int expected[] = {0, 1, 2, 3, 4, 5};
         sort(arr, sizeof(arr) / sizeof(int));
-        assert(equal(arr, expected, 6));
+        assert(equal(arr, expected, sizeof(arr) / sizeof(int)));
     }
 
     {
@@ -67,5 +67,12 @@ int main()
         int expected[] = {-55, 0, 1, 2, 3, 4};
         sort(arr, sizeof(arr) / sizeof(int));
         assert(equal(arr, expected, 6));
+    }
+
+    {
+        int arr[] = {-55, 4, 3, -200, 1, -100};
+        int expected[] = {-200, -100, -55, 1, 3, 4};
+        sort(arr, sizeof(arr) / sizeof(int));
+        assert(equal(arr, expected, sizeof(arr) / sizeof(int)));
     }
 }
